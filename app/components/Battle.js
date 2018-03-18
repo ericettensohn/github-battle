@@ -1,33 +1,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const Link = require('react-router-dom').Link;
-
-function PlayerPreview(props) {
-  return (
-    <div>
-      <div className='column'>
-        <img
-          className='avatar'
-          src={props.avatar}
-          alt={`avatar for '${props.userName}`}
-        />
-        <h2 className='username'>@{props.userName}</h2>
-      </div>
-      <button
-        className='reset'
-        onClick={() => props.onReset(props.id)}>
-          Reset
-      </button>
-    </div>
-  )
-}
-
-PlayerPreview.propTypes = {
-  avatar: PropTypes.string.isRequired,
-  userName: PropTypes.string.isRequired,
-  onReset: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired
-};
+const PlayerPreview = require('./PlayerPreview');
 
 class PlayerInput extends React.Component {
   constructor (props) {
@@ -124,13 +98,18 @@ class Battle extends React.Component {
               onSubmit={this.handleSubmit}
             />}
 
-          {playerOneImg !== null &&
-            <PlayerPreview 
-              avatar={playerOneImg}
-              userName={playerOneName}
-              onReset={this.handleReset}
-              id='playerOne'
-            />}
+            {playerOneImg !== null &&
+              <PlayerPreview 
+                avatar={playerOneImg}
+                userName={playerOneName}
+              >
+                <button
+                  className='reset'
+                  onClick={() => this.handleReset('playerOne')}>
+                    Reset
+                </button>
+              </PlayerPreview>
+            }
 
           {!playerTwoName &&
             <PlayerInput 
@@ -140,12 +119,12 @@ class Battle extends React.Component {
             />}
 
           {playerTwoImg !== null &&
-            <PlayerPreview 
-              avatar={playerTwoImg}
-              userName={playerTwoName}
-              onReset={this.handleReset}
-              id='playerTwo'
-            />}
+            <PlayerPreview avatar={playerTwoImg} userName={playerTwoName}>
+              <button className='reset' onClick={() => this.handleReset('playerTwo')}>
+                  Reset
+              </button>
+            </PlayerPreview>
+          }
         </div>
 
         {playerOneImg && playerTwoImg &&
